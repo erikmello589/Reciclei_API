@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.reciclei.api.dto.CreateUserEmpresaDTO;
 import com.reciclei.api.dto.ListaItemDTO;
-import com.reciclei.api.dto.ListaPacientesDTO;
+import com.reciclei.api.dto.ListaEmpresasDTO;
 import com.reciclei.api.model.Empresa;
 import com.reciclei.api.model.Role;
 import com.reciclei.api.repository.EmpresaRepository;
@@ -39,7 +39,7 @@ public class EmpresaController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/NovoPaciente")
+    //@PostMapping("/NovaEmpresa")
     public ResponseEntity<Void> criarPaciente(@RequestBody CreateUserEmpresaDTO dto, JwtAuthenticationToken token) {
         
         var user = userRepository.findById(UUID.fromString(token.getName()));
@@ -84,8 +84,8 @@ public class EmpresaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/Pacientes")
-    public ResponseEntity<ListaPacientesDTO> listaPacientesUser(@RequestParam(value = "page", defaultValue = "0") int page, 
+    @GetMapping("/PontosMapa")
+    public ResponseEntity<ListaEmpresasDTO> listaTodasEmpresas(@RequestParam(value = "page", defaultValue = "0") int page, 
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             JwtAuthenticationToken token) 
     {
@@ -93,28 +93,25 @@ public class EmpresaController {
         var user = userRepository.findById(UUID.fromString(token.getName()))
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
-        // Busca os pacientes associados ao User ID com paginação e ordenação
-        var listaPacientesPage = empresaRepository.findByUserUserID(user.getUserID(), PageRequest.of(page, pageSize, Sort.Direction.ASC, "dataCriacao"))
+        // Busca todas as empresas do banco com paginação e ordenação
+        var listaEmpresasPage = empresaRepository.findAll(PageRequest.of(page, pageSize, Sort.Direction.ASC, "dataCriacao"))
                                                 .map(listaItem -> new ListaItemDTO(
                                                         listaItem.getEmpresaId(), 
                                                         listaItem.getNomeEmpresa(), 
                                                         listaItem.getCnpj(), 
                                                         listaItem.getEmail(),
-                                                        listaItem.getTelefone(), 
-                                                        listaItem.getCelular(),
-                                                        listaItem.getCep(), 
-                                                        listaItem.getEndereco(),
+                                                        listaItem.getCep(),                                                        listaItem.getEndereco(),
                                                         listaItem.getNumeroEndereco(), 
                                                         listaItem.getDataCriacao()
                                                     ));
 
         // Retorna a resposta com os dados paginados
-        return ResponseEntity.ok(new ListaPacientesDTO(
-            listaPacientesPage.getContent(), 
+        return ResponseEntity.ok(new ListaEmpresasDTO(
+            listaEmpresasPage.getContent(), 
             page, 
             pageSize, 
-            listaPacientesPage.getTotalPages(), 
-            listaPacientesPage.getTotalElements()
+            listaEmpresasPage.getTotalPages(), 
+            listaEmpresasPage.getTotalElements()
         ));
     }
 
