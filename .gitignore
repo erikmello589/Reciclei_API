@@ -1,0 +1,17 @@
+# Ignorar configurações do editor
+.vscode/
+
+# Ignorar diretórios de build temporários
+target/
+build/
+
+# Ignorar arquivos e pastas Maven
+.mvn/
+.mvn/wrapper/maven-wrapper.jar
+
+# Ignorar logs
+*.log
+
+# Ignorar arquivos de chaves específicos
+src/main/resources/app.pub
+src/main/resources/app.key
