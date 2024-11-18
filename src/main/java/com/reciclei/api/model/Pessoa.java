@@ -44,6 +44,8 @@ public class Pessoa
 
     private Date dataNasc;
 
+    private String sexo;
+
     @CreationTimestamp
     private Instant dataCriacao;
 
@@ -141,6 +143,14 @@ public class Pessoa
 
     public void setDataNasc(Date dataNasc) {
         this.dataNasc = dataNasc;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     

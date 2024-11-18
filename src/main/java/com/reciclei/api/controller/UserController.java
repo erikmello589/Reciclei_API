@@ -83,6 +83,7 @@ public class UserController {
         pessoa.setEndereco(createUserPessoaDTO.endereco());
         pessoa.setNumeroEndereco(createUserPessoaDTO.numeroEndereco());
         pessoa.setDataNasc(createUserPessoaDTO.dataNasc());
+        pessoa.setSexo(createUserPessoaDTO.sexo());
         
         
         pessoaRepository.save(pessoa);
